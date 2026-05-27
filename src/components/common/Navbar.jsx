@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { Link as ScrollLink } from "react-scroll";
 
 const NAV_LINKS = [
-  { label: "About",      href: "#about"      },
-  { label: "Skills",     href: "#skills"     },
-  { label: "Projects",   href: "#projects"   },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact",    href: "#contact"    },
+  { label: "About",      to: "about"      },
+  { label: "Skills",     to: "skills"     },
+  { label: "Projects",   to: "projects"   },
+  { label: "Experience", to: "experience" },
+  { label: "Contact",    to: "contact"    },
 ];
 
 const navVariants = {
@@ -35,8 +36,8 @@ const mobileMenuVariants = {
 };
 
 function Navbar() {
-  const [menuOpen,   setMenuOpen]   = useState(false);
-  const [scrolled,   setScrolled]   = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Increase glass opacity once the user scrolls past 20px
   useEffect(() => {
@@ -77,12 +78,12 @@ function Navbar() {
           Suresh.dev
         </a>
 
-        {/* Desktop nav links */}
+        {/* Desktop nav links — unchanged: plain anchor with href for stable behaviour */}
         <div className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link, i) => (
             <motion.a
-              key={link.href}
-              href={link.href}
+              key={link.to}
+              href={`#${link.to}`}
               custom={i}
               variants={linkVariants}
               initial="hidden"
@@ -140,17 +141,20 @@ function Navbar() {
             }}
           >
             <div className="flex flex-col px-6 py-4 gap-4">
-              {[...NAV_LINKS, { label: "Hire Me", href: "#contact" }].map((link) => (
-                <a
-                  key={link.href + link.label}
-                  href={link.href}
+              {[...NAV_LINKS, { label: "Hire Me", to: "contact" }].map((link) => (
+                <ScrollLink
+                  key={link.to + link.label}
+                  to={link.to}
+                  smooth={true}
+                  duration={500}
+                  offset={-90}
                   onClick={closeMobile}
                   className="text-[#94A3B8] hover:text-blue-400 text-base py-2
                              border-b border-white/5 last:border-0
-                             transition-colors duration-200"
+                             transition-colors duration-200 cursor-pointer"
                 >
                   {link.label}
-                </a>
+                </ScrollLink>
               ))}
             </div>
           </motion.div>
