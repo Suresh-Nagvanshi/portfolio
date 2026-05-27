@@ -4,12 +4,13 @@ import {
   HiOutlineMail,
   HiOutlineLocationMarker,
   HiOutlineCheckCircle,
+  HiExclamation,
 } from "react-icons/hi";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import about from "../../data/about";
 import emailjs from "@emailjs/browser";
 
-/* ─── Animation Variants ────────────────────────────────────────── */
+/* ─── Animation Variants ──────────────────────────────────────────── */
 
 const containerVariants = {
   hidden: {},
@@ -36,11 +37,55 @@ const fadeLeft = {
   },
 };
 
-/* ─── Component ─────────────────────────────────────────────────── */
+/* ─── Validation helpers ─────────────────────────────────────────── */
+
+const RULES = {
+  name: (v) => {
+    if (!v.trim()) return "Full name is required.";
+    if (v.trim().length < 2) return "Name must be at least 2 characters.";
+    return null;
+  },
+  email: (v) => {
+    if (!v.trim()) return "Email address is required.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())) return "Please enter a valid email address.";
+    return null;
+  },
+  message: (v) => {
+    if (!v.trim()) return "Message is required.";
+    if (v.trim().length < 10) return "Message must be at least 10 characters.";
+    return null;
+  },
+};
+
+/* ─── Inline Field Error ─────────────────────────────────────────── */
+
+function FieldError({ message }) {
+  return (
+    <AnimatePresence>
+      {message && (
+        <motion.p
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.2 }}
+          className="flex items-center gap-1.5 text-xs text-red-400 mt-1"
+          role="alert"
+        >
+          <HiExclamation size={13} className="flex-shrink-0" />
+          {message}
+        </motion.p>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/* ─── Component ────────────────────────────────────────────────── */
 
 function Contact() {
   // Form states
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [fieldErrors, setFieldErrors] = useState({ name: null, email: null, message: null });
+  const [touched, setTouched] = useState({ name: false, email: false, message: false });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -78,11 +123,33 @@ function Contact() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Validate on change if already touched
+    if (touched[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: RULES[name](value) }));
+    }
   };
 
-  const validateEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setFieldErrors((prev) => ({ ...prev, [name]: RULES[name](value) }));
   };
+
+  const validateAll = () => {
+    const errors = {
+      name: RULES.name(formData.name),
+      email: RULES.email(formData.email),
+      message: RULES.message(formData.message),
+    };
+    setFieldErrors(errors);
+    setTouched({ name: true, email: true, message: true });
+    return !errors.name && !errors.email && !errors.message;
+  };
+
+  const isFormValid =
+    !RULES.name(formData.name) &&
+    !RULES.email(formData.email) &&
+    !RULES.message(formData.message);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -109,18 +176,8 @@ function Contact() {
       return;
     }
 
-    // Field validation
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      setIsError(true);
-      setErrorMessage("All fields are required.");
-      return;
-    }
-
-    if (!validateEmail(formData.email.trim())) {
-      setIsError(true);
-      setErrorMessage("Please enter a valid email address.");
-      return;
-    }
+    // Full validation before submit
+    if (!validateAll()) return;
 
     setIsSubmitting(true);
 
@@ -140,6 +197,8 @@ function Contact() {
         setIsSubmitting(false);
         setIsSuccess(true);
         setFormData({ name: "", email: "", message: "" });
+        setFieldErrors({ name: null, email: null, message: null });
+        setTouched({ name: false, email: false, message: false });
 
         // Set 60-second cooldown in localStorage and state
         const expiry = Date.now() + 60000;
@@ -155,7 +214,7 @@ function Contact() {
         console.error("EmailJS send failed:", err);
         setIsSubmitting(false);
         setIsError(true);
-        setErrorMessage("Failed to send message");
+        setErrorMessage("Failed to send message. Please try again later.");
       });
   };
 
@@ -263,11 +322,12 @@ function Contact() {
                     whileHover={{ scale: 1.08, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     className="w-11 h-11 rounded-xl flex items-center justify-center glass border border-white/5 text-[#94A3B8]
-                               hover:text-white hover:border-[#0A66C2]/40 hover:bg-[#0A66C2]/10 transition-all duration-300"
+                               hover:text-white hover:border-blue-500/30 hover:bg-blue-500/10 transition-all duration-300"
                     aria-label="LinkedIn Profile"
                   >
                     <FaLinkedin size={18} />
                   </motion.a>
+
                   {/* GitHub */}
                   <motion.a
                     href={about.github}
@@ -276,7 +336,7 @@ function Contact() {
                     whileHover={{ scale: 1.08, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     className="w-11 h-11 rounded-xl flex items-center justify-center glass border border-white/5 text-[#94A3B8]
-                               hover:text-white hover:border-white/20 hover:bg-white/5 transition-all duration-300"
+                               hover:text-white hover:border-purple-500/30 hover:bg-purple-500/10 transition-all duration-300"
                     aria-label="GitHub Profile"
                   >
                     <FaGithub size={18} />
@@ -323,7 +383,7 @@ function Contact() {
                 <h3 className="text-xl font-bold text-white mb-6 relative z-10">Send a Message</h3>
 
                 {/* Form Element */}
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4.5 relative z-10">
+                <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4.5 relative z-10">
                   {/* Honeypot field for anti-spam bot prevention */}
                   <div className="absolute opacity-0 pointer-events-none -z-10 w-0 h-0 overflow-hidden" aria-hidden="true">
                     <label htmlFor="form-bot-field">Do not fill this out if you are a human</label>
@@ -339,67 +399,111 @@ function Contact() {
                   </div>
 
                   {/* Name field */}
-                  <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-1">
                     <label htmlFor="form-name" className="text-xs text-[#64748B] font-semibold tracking-wide uppercase">
-                      Full Name
+                      Full Name <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
                       id="form-name"
                       name="name"
                       required
-                      placeholder="John Doe"
+                      autoComplete="name"
                       value={formData.name}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       disabled={isSubmitting || cooldown > 0}
-                      className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-white text-sm 
-                                 placeholder-[#475569] focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.04]
-                                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30
-                                 disabled:opacity-50 transition-all duration-300"
+                      aria-describedby={fieldErrors.name ? "name-error" : undefined}
+                      aria-invalid={!!fieldErrors.name}
+                      className={`w-full bg-white/[0.02] border rounded-xl px-4 py-3 text-white text-sm 
+                                 focus:outline-none focus:bg-white/[0.04]
+                                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-0
+                                 disabled:opacity-50 transition-all duration-300
+                                 ${
+                                   fieldErrors.name
+                                     ? "border-red-500/50 focus:border-red-500/70 focus-visible:ring-red-500/30"
+                                     : touched.name && !fieldErrors.name
+                                     ? "border-green-500/40 focus:border-green-500/60 focus-visible:ring-green-500/30"
+                                     : "border-white/10 focus:border-blue-500/50 focus-visible:ring-blue-500/30"
+                                 }`}
                     />
+                    <span id="name-error"><FieldError message={fieldErrors.name} /></span>
                   </div>
 
                   {/* Email field */}
-                  <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-1">
                     <label htmlFor="form-email" className="text-xs text-[#64748B] font-semibold tracking-wide uppercase">
-                      Email Address
+                      Email Address <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="email"
                       id="form-email"
                       name="email"
                       required
-                      placeholder="johndoe@example.com"
+                      autoComplete="email"
                       value={formData.email}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       disabled={isSubmitting || cooldown > 0}
-                      className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-white text-sm 
-                                 placeholder-[#475569] focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.04]
-                                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30
-                                 disabled:opacity-50 transition-all duration-300"
+                      aria-describedby={fieldErrors.email ? "email-error" : undefined}
+                      aria-invalid={!!fieldErrors.email}
+                      className={`w-full bg-white/[0.02] border rounded-xl px-4 py-3 text-white text-sm 
+                                 focus:outline-none focus:bg-white/[0.04]
+                                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-0
+                                 disabled:opacity-50 transition-all duration-300
+                                 ${
+                                   fieldErrors.email
+                                     ? "border-red-500/50 focus:border-red-500/70 focus-visible:ring-red-500/30"
+                                     : touched.email && !fieldErrors.email
+                                     ? "border-green-500/40 focus:border-green-500/60 focus-visible:ring-green-500/30"
+                                     : "border-white/10 focus:border-blue-500/50 focus-visible:ring-blue-500/30"
+                                 }`}
                     />
+                    <span id="email-error"><FieldError message={fieldErrors.email} /></span>
                   </div>
 
                   {/* Message field */}
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="form-message" className="text-xs text-[#64748B] font-semibold tracking-wide uppercase">
-                      Your Message
-                    </label>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="form-message" className="text-xs text-[#64748B] font-semibold tracking-wide uppercase">
+                        Your Message <span className="text-red-400">*</span>
+                      </label>
+                      <span className={`text-[10px] tabular-nums transition-colors duration-200 ${
+                        formData.message.trim().length >= 10 ? "text-green-400" : "text-[#64748B]"
+                      }`}>
+                        {formData.message.trim().length}/10 min
+                      </span>
+                    </div>
                     <textarea
                       id="form-message"
                       name="message"
                       required
                       rows="4"
-                      placeholder="How can I help you?"
                       value={formData.message}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       disabled={isSubmitting || cooldown > 0}
-                      className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-white text-sm 
-                                 placeholder-[#475569] focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.04]
-                                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30
-                                 disabled:opacity-50 transition-all duration-300 resize-none"
+                      aria-describedby={fieldErrors.message ? "message-error" : undefined}
+                      aria-invalid={!!fieldErrors.message}
+                      className={`w-full bg-white/[0.02] border rounded-xl px-4 py-3 text-white text-sm 
+                                 focus:outline-none focus:bg-white/[0.04]
+                                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-0
+                                 disabled:opacity-50 transition-all duration-300 resize-none
+                                 ${
+                                   fieldErrors.message
+                                     ? "border-red-500/50 focus:border-red-500/70 focus-visible:ring-red-500/30"
+                                     : touched.message && !fieldErrors.message
+                                     ? "border-green-500/40 focus:border-green-500/60 focus-visible:ring-green-500/30"
+                                     : "border-white/10 focus:border-blue-500/50 focus-visible:ring-blue-500/30"
+                                 }`}
                     />
+                    <span id="message-error"><FieldError message={fieldErrors.message} /></span>
                   </div>
+
+                  {/* Required fields note */}
+                  <p className="text-[10px] text-[#64748B] -mt-1">
+                    <span className="text-red-400">*</span> All fields are required
+                  </p>
 
                   {/* Action Button & Confirmation */}
                   <div className="mt-2 flex flex-col gap-3">
@@ -407,7 +511,7 @@ function Contact() {
                       type="submit"
                       whileHover={{ scale: (isSubmitting || cooldown > 0) ? 1 : 1.02 }}
                       whileTap={{ scale: (isSubmitting || cooldown > 0) ? 1 : 0.98 }}
-                      disabled={isSubmitting || cooldown > 0 || !formData.name || !formData.email || !formData.message}
+                      disabled={isSubmitting || cooldown > 0 || !isFormValid}
                       className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white
                                  cursor-pointer select-none transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed
                                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30"
@@ -437,6 +541,8 @@ function Contact() {
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.3 }}
                           className="flex items-center gap-2.5 p-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-xs mt-1"
+                          role="status"
+                          aria-live="polite"
                         >
                           <HiOutlineCheckCircle size={16} className="flex-shrink-0" />
                           <p className="leading-normal font-medium">
@@ -455,6 +561,8 @@ function Contact() {
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.3 }}
                           className="flex items-center gap-2.5 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs mt-1"
+                          role="alert"
+                          aria-live="assertive"
                         >
                           <span className="flex-shrink-0 text-red-400 font-bold">⚠️</span>
                           <p className="leading-normal font-medium">
