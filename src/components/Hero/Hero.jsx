@@ -128,7 +128,7 @@ function Hero() {
           className="mt-12 flex gap-8"
         >
           {[
-            { value: "2+",  label: "Years Experience" },
+            { value: "1+",  label: "Years Experience" },
             { value: "10+", label: "Projects Built"   },
             { value: "5+",  label: "Tech Domains"     },
           ].map((stat) => (
