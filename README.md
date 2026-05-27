@@ -21,7 +21,7 @@ A personal portfolio website built with React 19, Vite 6, and Tailwind CSS v4. T
 
 ## Live Demo
 
-[https://suresh-nagvanshi.github.io/portfolio]([https://suresh-nagvanshi.github.io/portfolio](https://suresh-nagvanshi-portfolio.vercel.app/))
+[https://suresh-nagvanshi-portfolio.vercel.app](https://suresh-nagvanshi-portfolio.vercel.app)
 
 ---
 
