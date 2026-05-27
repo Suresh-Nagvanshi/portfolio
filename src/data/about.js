@@ -32,8 +32,8 @@ interests:[
 
 // Central Contact details
 email: "iamsureshnagvanshi@gmail.com",
-github: "https://github.com",
-linkedin: "https://linkedin.com",
+github: "https://github.com/Suresh-Nagvanshi",
+linkedin: "https://www.linkedin.com/in/suresh-nagvanshi",
 telegram: "https://t.me/nagvanshi_12"
 
 };
