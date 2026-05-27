@@ -14,7 +14,7 @@ import {
 /* ── Static config ────────────────────────────────────────────── */
 
 const STATS = [
-  { value: "2+",  label: "Years Experience",  icon: <HiBriefcase size={20} /> },
+  { value: "1+",  label: "Years Experience",  icon: <HiBriefcase size={20} /> },
   { value: "10+", label: "Projects Built",    icon: <HiCode size={20} />      },
   { value: "5+",  label: "Tech Domains",      icon: <HiDatabase size={20} />  },
   { value: "AI",  label: "Backend Focus",     icon: <HiChip size={20} />      },
