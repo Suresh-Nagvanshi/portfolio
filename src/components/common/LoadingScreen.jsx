@@ -53,16 +53,17 @@ function LoadingScreen() {
         <motion.div
           animate={{
             scale: [0.98, 1.02, 0.98],
-            filter: ["brightness(0.9)", "brightness(1.1)", "brightness(0.9)"],
+            opacity: [0.85, 1, 0.85],
           }}
           transition={{
             duration: 2.2,
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="text-4xl md:text-5xl font-extrabold tracking-tighter gradient-text select-none cursor-default font-sans"
         >
-          Suresh.dev
+          <div className="text-4xl md:text-5xl font-extrabold tracking-tighter gradient-text select-none cursor-default font-sans">
+            Suresh.dev
+          </div>
         </motion.div>
 
         {/* Premium Slim Loading Bar */}
