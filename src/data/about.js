@@ -1,40 +1,45 @@
 const about = {
 
-intro:
-"I enjoy building systems that combine software engineering with intelligent decision-making. My work focuses on backend development, scalable architectures, and integrating AI into practical products.",
+  intro:
+    "Java backend developer and final-year MCA student at Christ University, specializing in Spring Boot, Spring Security, REST APIs, and microservice architecture. Published IEEE researcher (ICONICA 2026) with real-world internship experience building enterprise ERP systems and AI-integrated platforms.",
 
-details:[
-{
-title:"Backend Engineering",
-description:"Designing APIs, scalable systems and efficient architectures."
-},
+  details: [
+    {
+      title: "Backend Engineering",
+      description: "Designing secure, scalable APIs and microservice architectures using Spring Boot, NestJS, JWT, RBAC, and multi-tenant patterns."
+    },
+    {
+      title: "AI Integration",
+      description: "Building intelligent systems powered by TensorFlow, DistilBERT, YOLOv8, and LLM APIs — from model training to production inference pipelines."
+    },
+    {
+      title: "Published Researcher",
+      description: "Co-authored FloodSegNet, a multimodal GeoAI framework published at IEEE ICONICA August 2026, combining satellite imagery and deep learning for flood segmentation."
+    },
+  ],
 
-{
-title:"AI Integration",
-description:"Building intelligent systems powered by machine learning and modern AI."
-},
+  interests: [
+    "Backend Systems",
+    "Distributed Architecture",
+    "AI Applications",
+    "System Design",
+    "Java / Spring Boot",
+    "Application Security",
+    "IEEE Research",
+  ],
 
-{
-title:"Problem Solving",
-description:"Transforming ideas into practical solutions with measurable impact."
-}
+  highlights: [
+    { value: "97.6%", label: "AI Model Accuracy" },
+    { value: "IEEE",  label: "Published Researcher" },
+    { value: "3.86",  label: "MCA CGPA / 4.0" },
+    { value: "6+",    label: "Production Projects" },
+  ],
 
-],
-
-interests:[
-"Backend Systems",
-"Distributed Architecture",
-"AI Applications",
-"System Design",
-"Java",
-"Spring Boot"
-],
-
-// Central Contact details
-email: "iamsureshnagvanshi@gmail.com",
-github: "https://github.com/Suresh-Nagvanshi",
-linkedin: "https://www.linkedin.com/in/suresh-nagvanshi",
-telegram: "https://t.me/nagvanshi_12"
+  // Central Contact details
+  email:    "iamsureshnagvanshi@gmail.com",
+  github:   "https://github.com/Suresh-Nagvanshi",
+  linkedin: "https://www.linkedin.com/in/suresh-nagvanshi",
+  telegram: "https://t.me/nagvanshi_12",
 
 };
 
