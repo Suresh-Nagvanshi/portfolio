@@ -2,7 +2,6 @@ import { TypeAnimation } from "react-type-animation";
 import { motion } from "framer-motion";
 import TechCard from "./TechCard";
 import { HiArrowRight, HiDownload } from "react-icons/hi";
-import { HiAcademicCap } from "react-icons/hi2";
 
 const containerVariants = {
   hidden: {},
@@ -18,10 +17,9 @@ const itemVariants = {
 };
 
 const stats = [
-  { value: "1+",    label: "Years Experience" },
-  { value: "10+",   label: "Projects Built"   },
-  { value: "IEEE",  label: "Published Author"  },
-  { value: "3.86",  label: "MCA CGPA / 4.0"   },
+  { value: "1+",   label: "Years Exp"      },
+  { value: "10+",  label: "Projects"        },
+  { value: "3.86", label: "MCA CGPA / 4.0" },
 ];
 
 function Hero() {
@@ -31,36 +29,33 @@ function Hero() {
       className="section-hero flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16"
       aria-labelledby="hero-heading"
     >
-      {/* Ambient glow orbs */}
+      {/* Glow orbs */}
       <div aria-hidden="true" className="glow" style={{ top: "10%", left: "-8%" }} />
-      <div aria-hidden="true" className="glow glow-purple" style={{ bottom: "5%", right: "-8%", width: "360px", height: "360px" }} />
-      <div aria-hidden="true" className="glow glow-cyan" style={{ top: "60%", left: "40%", width: "280px", height: "280px" }} />
+      <div aria-hidden="true" className="glow glow-indigo" style={{ bottom: "5%", right: "-8%", width: "360px", height: "360px" }} />
+      <div aria-hidden="true" className="glow glow-rose" style={{ top: "55%", left: "38%", width: "280px", height: "280px" }} />
 
-      {/* ── Left column ────────────────────────────── */}
+      {/* ── Left column ── */}
       <motion.div
         className="w-full lg:w-[58%] relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        {/* IEEE / Research badge */}
-        <motion.div variants={itemVariants} className="mb-5">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold
-                           bg-blue-500/10 border border-blue-500/25 text-blue-300 tracking-wide">
-            <HiAcademicCap className="w-3.5 h-3.5" />
-            IEEE Published · ICONICA 2026
-          </span>
-        </motion.div>
 
-        {/* Eyebrow */}
+        {/* ── CHAPTER LABEL (story mode) ── */}
+        <motion.p variants={itemVariants} className="chapter-label">
+          Prologue · The Journey Begins
+        </motion.p>
+
+        {/* ── Eyebrow ── */}
         <motion.p
           variants={itemVariants}
-          className="text-blue-400 text-sm font-semibold tracking-[0.22em] uppercase mb-3"
+          className="text-amber-400 text-sm font-semibold tracking-[0.22em] uppercase mb-3"
         >
           👋 Hello, I am
         </motion.p>
 
-        {/* Name */}
+        {/* ── Name ── */}
         <motion.h1
           id="hero-heading"
           variants={itemVariants}
@@ -70,18 +65,18 @@ function Hero() {
           <span className="gradient-text">Nagvanshi</span>
         </motion.h1>
 
-        {/* Typewriter */}
+        {/* ── Typewriter ── */}
         <motion.div
           variants={itemVariants}
           className="text-2xl lg:text-3xl mt-4 h-12 flex items-center"
         >
           <TypeAnimation
             sequence={[
-              "Backend Developer",         2000,
-              "Spring Boot Engineer",      2000,
-              "AI Systems Builder",        2000,
-              "Java · Spring Security",    2000,
-              "IEEE Researcher",           2000,
+              "Backend Developer",      2000,
+              "Spring Boot Engineer",   2000,
+              "AI Systems Builder",     2000,
+              "Java · Spring Security", 2000,
+              "IEEE Researcher",        2000,
             ]}
             speed={55}
             repeat={Infinity}
@@ -89,47 +84,61 @@ function Hero() {
           />
         </motion.div>
 
-        {/* Description */}
+        {/* ── Description ── */}
         <motion.p
           variants={itemVariants}
-          className="mt-6 max-w-lg text-[#94A3B8] text-base lg:text-lg leading-relaxed"
+          className="mt-6 max-w-lg text-[#9CA3AF] text-base lg:text-lg leading-relaxed"
         >
           Final-year MCA student at Christ University. Building secure, scalable
           backend systems and AI-integrated applications — from internship-grade
           ERP platforms to IEEE-published research.
         </motion.p>
 
-        {/* CTA Buttons */}
-        <motion.div variants={itemVariants} className="mt-10 flex flex-wrap gap-4">
-          <a
-            href="#projects"
-            className="btn-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2"
+        {/* ── IEEE inline credential (no floating badge) ── */}
+        <motion.div
+          variants={itemVariants}
+          className="mt-5 flex items-center gap-2.5"
+        >
+          <span
+            className="inline-flex items-center gap-1.5 text-xs font-semibold"
+            style={{ color: "#FCD34D" }}
           >
+            <span
+              className="inline-block w-4 h-4 rounded-full flex-shrink-0"
+              style={{ background: "var(--grad-primary)", lineHeight: 1 }}
+              aria-hidden="true"
+            />
+            IEEE Published — ICONICA 2026
+          </span>
+          <span className="text-[#4B5563] text-xs">·</span>
+          <span className="text-xs text-[#6B7280]">FloodSegNet · Multimodal GeoAI</span>
+        </motion.div>
+
+        {/* ── CTA Buttons ── */}
+        <motion.div variants={itemVariants} className="mt-9 flex flex-wrap gap-4">
+          <a href="#projects" className="btn-primary">
             View Projects
             <HiArrowRight className="w-4 h-4" />
           </a>
-          <a
-            href="/resume.pdf"
-            download="Suresh_Nagvanshi_Resume.pdf"
-            className="btn-ghost focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-          >
+          <a href="/resume.pdf" download="Suresh_Nagvanshi_Resume.pdf" className="btn-ghost">
             <HiDownload className="w-4 h-4" />
             Resume
           </a>
         </motion.div>
 
-        {/* Stats row */}
+        {/* ── Stats ── */}
         <motion.div variants={itemVariants} className="mt-12 flex flex-wrap gap-8">
           {stats.map((s) => (
-            <div key={s.label} className="text-center">
+            <div key={s.label}>
               <p className="text-2xl font-black gradient-text">{s.value}</p>
-              <p className="text-[0.7rem] text-[#94A3B8] mt-0.5 tracking-wide uppercase">{s.label}</p>
+              <p className="text-[0.68rem] text-[#9CA3AF] mt-0.5 tracking-wide uppercase">{s.label}</p>
             </div>
           ))}
         </motion.div>
+
       </motion.div>
 
-      {/* ── Right column ────────────────────────────── */}
+      {/* ── Right column ── */}
       <div className="w-full lg:w-[42%] relative z-10">
         <TechCard />
       </div>

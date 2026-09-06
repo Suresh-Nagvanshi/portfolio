@@ -1,26 +1,38 @@
 @import "tailwindcss";
 
-/* ─── Design Tokens ─────────────────────────────────────────── */
+/* ─── Story-Mode Design Tokens ───────────────────────────────── */
 :root {
-  --background:  #080B14;
-  --surface:     rgba(255, 255, 255, 0.04);
-  --surface-2:   rgba(255, 255, 255, 0.07);
-  --primary:     #4F8EF7;
-  --secondary:   #8B5CF6;
-  --accent:      #06B6D4;
-  --text:        #F1F5F9;
-  --muted:       #94A3B8;
-  --border:      rgba(255, 255, 255, 0.09);
-  --border-glow: rgba(79, 142, 247, 0.3);
-  --nav-height:  72px;
+  --background:   #08090F;   /* deep midnight */
+  --surface:      rgba(255, 255, 255, 0.04);
+  --surface-2:    rgba(255, 255, 255, 0.07);
+
+  /* Amber-gold primary (story warmth) */
+  --primary:      #F59E0B;
+  --primary-dim:  rgba(245, 158, 11, 0.15);
+  --primary-glow: rgba(245, 158, 11, 0.35);
+
+  /* Indigo secondary */
+  --secondary:    #6366F1;
+  --secondary-dim:rgba(99, 102, 241, 0.15);
+
+  /* Soft rose accent */
+  --accent:       #F472B6;
+  --accent-dim:   rgba(244, 114, 182, 0.12);
+
+  --text:         #F1F0EC;   /* warm off-white */
+  --muted:        #9CA3AF;
+  --border:       rgba(255, 255, 255, 0.08);
+  --border-glow:  rgba(245, 158, 11, 0.28);
+  --nav-height:   72px;
 
   /* Gradient palette */
-  --grad-primary:  linear-gradient(135deg, #4F8EF7 0%, #8B5CF6 100%);
-  --grad-cyan:     linear-gradient(135deg, #06B6D4 0%, #4F8EF7 100%);
-  --grad-warm:     linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  --grad-primary:  linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  --grad-indigo:   linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  --grad-warm:     linear-gradient(135deg, #F59E0B 0%, #F472B6 100%);
+  --grad-cool:     linear-gradient(135deg, #6366F1 0%, #06B6D4 100%);
 }
 
-/* ─── Global Reset ───────────────────────────────────────────── */
+/* ─── Global Reset ────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
@@ -39,38 +51,36 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Subtle grid texture overlay */
+/* Fine dot-grid texture for "manuscript" feel */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(79, 142, 247, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(79, 142, 247, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
+  background-image: radial-gradient(rgba(245, 158, 11, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* ─── Custom Scrollbar ───────────────────────────────────────── */
+/* ─── Custom Scrollbar ────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--background); }
 ::-webkit-scrollbar-thumb {
-  background: rgba(79, 142, 247, 0.45);
+  background: rgba(245, 158, 11, 0.4);
   border-radius: 999px;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(79, 142, 247, 0.75); }
+::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.7); }
 
-/* ─── Glassmorphism ──────────────────────────────────────────── */
+/* ─── Glassmorphism ───────────────────────────────────────────── */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(15, 16, 24, 0.7);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border);
@@ -80,11 +90,11 @@ body::before {
 
 .glass-card:hover {
   border-color: var(--border-glow);
-  box-shadow: 0 0 32px rgba(79, 142, 247, 0.12), 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 32px rgba(245, 158, 11, 0.1), 0 8px 40px rgba(0,0,0,0.5);
   transform: translateY(-3px);
 }
 
-/* ─── Gradient Text ──────────────────────────────────────────── */
+/* ─── Gradient Text ───────────────────────────────────────────── */
 .gradient-text {
   background: var(--grad-primary);
   -webkit-background-clip: text;
@@ -93,15 +103,15 @@ body::before {
   color: transparent;
 }
 
-.gradient-text-cyan {
-  background: var(--grad-cyan);
+.gradient-text-cool {
+  background: var(--grad-cool);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
 
-/* ─── Glow Buttons ───────────────────────────────────────────── */
+/* ─── Buttons ─────────────────────────────────────────────────── */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -114,13 +124,14 @@ body::before {
   font-size: 0.9rem;
   border: none;
   cursor: pointer;
+  text-decoration: none;
   transition: opacity 0.25s, transform 0.25s, box-shadow 0.25s;
-  box-shadow: 0 4px 24px rgba(79, 142, 247, 0.35);
+  box-shadow: 0 4px 24px var(--primary-glow);
 }
 .btn-primary:hover {
-  opacity: 0.9;
+  opacity: 0.88;
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(79, 142, 247, 0.5);
+  box-shadow: 0 8px 36px var(--primary-glow);
 }
 
 .btn-ghost {
@@ -135,15 +146,16 @@ body::before {
   font-size: 0.9rem;
   border: 1px solid var(--border);
   cursor: pointer;
+  text-decoration: none;
   transition: background 0.25s, border-color 0.25s, transform 0.25s;
 }
 .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(245, 158, 11, 0.07);
   border-color: var(--border-glow);
   transform: translateY(-2px);
 }
 
-/* ─── Tech Pill / Badge ──────────────────────────────────────── */
+/* ─── Tech Pills ──────────────────────────────────────────────── */
 .tech-pill {
   display: inline-block;
   padding: 0.25rem 0.75rem;
@@ -151,14 +163,13 @@ body::before {
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  background: rgba(79, 142, 247, 0.12);
-  border: 1px solid rgba(79, 142, 247, 0.25);
-  color: #93C5FD;
-  transition: background 0.2s, border-color 0.2s;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: #FCD34D;
+  transition: background 0.2s;
 }
 .tech-pill:hover {
-  background: rgba(79, 142, 247, 0.22);
-  border-color: rgba(79, 142, 247, 0.5);
+  background: rgba(245, 158, 11, 0.2);
 }
 
 .badge-pill {
@@ -173,7 +184,30 @@ body::before {
   color: #fff;
 }
 
-/* ─── Section Layout ─────────────────────────────────────────── */
+/* ─── Story Chapter Label ─────────────────────────────────────── */
+.chapter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 0.6rem;
+  opacity: 0.85;
+}
+
+.chapter-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  background: var(--grad-primary);
+  border-radius: 999px;
+}
+
+/* ─── Section Layout ──────────────────────────────────────────── */
 .section {
   min-height: 100vh;
   padding-left:  clamp(1.5rem, 8vw, 9rem);
@@ -222,37 +256,37 @@ body::before {
   margin-bottom: 3.5rem;
 }
 
-/* Section separator */
+/* Story-mode section divider — thin golden line */
 .divider {
   width: 100%;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(79, 142, 247, 0.2), transparent);
+  background: linear-gradient(to right, transparent, rgba(245, 158, 11, 0.25), transparent);
   margin: 0;
 }
 
-/* ─── Ambient Glow Orbs ──────────────────────────────────────── */
+/* ─── Ambient Glow Orbs ───────────────────────────────────────── */
 .glow {
   position: absolute;
   border-radius: 50%;
   width: 500px;
   height: 500px;
   background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-  filter: blur(100px);
-  opacity: 0.12;
+  filter: blur(110px);
+  opacity: 0.08;
   pointer-events: none;
 }
 
-.glow-purple {
+.glow-indigo {
   background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
-  opacity: 0.10;
-}
-
-.glow-cyan {
-  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
   opacity: 0.09;
 }
 
-/* ─── Timeline (Experience) ──────────────────────────────────── */
+.glow-rose {
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.07;
+}
+
+/* ─── Timeline ────────────────────────────────────────────────── */
 .timeline-line {
   position: absolute;
   left: 1.5rem;
@@ -260,7 +294,7 @@ body::before {
   bottom: 0;
   width: 2px;
   background: linear-gradient(to bottom, var(--primary), var(--secondary), transparent);
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 .timeline-dot {
@@ -268,11 +302,11 @@ body::before {
   height: 0.75rem;
   border-radius: 50%;
   background: var(--grad-primary);
-  box-shadow: 0 0 12px rgba(79, 142, 247, 0.6);
+  box-shadow: 0 0 14px var(--primary-glow);
   flex-shrink: 0;
 }
 
-/* ─── Featured Project Strip ─────────────────────────────────── */
+/* ─── Featured Badge ──────────────────────────────────────────── */
 .featured-badge {
   position: absolute;
   top: 1rem;
@@ -283,12 +317,12 @@ body::before {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: linear-gradient(135deg, rgba(79,142,247,0.25), rgba(139,92,246,0.25));
-  border: 1px solid rgba(79, 142, 247, 0.4);
-  color: #93C5FD;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #FCD34D;
 }
 
-/* ─── Skill Bars ─────────────────────────────────────────────── */
+/* ─── Skill Bars ──────────────────────────────────────────────── */
 .skill-bar-track {
   width: 100%;
   height: 4px;
@@ -304,7 +338,7 @@ body::before {
   transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ─── Focus / Accessibility ──────────────────────────────────── */
+/* ─── Focus / Accessibility ───────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 3px;
