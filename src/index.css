@@ -2,24 +2,29 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
-  --background: #0A0A0A;
-  --surface:    rgba(255, 255, 255, 0.04);
-  --primary:    #3B82F6;
-  --secondary:  #7C3AED;
-  --text:       #F8FAFC;
-  --muted:      #94A3B8;
-  --border:     rgba(255, 255, 255, 0.08);
-  --nav-height: 72px;
+  --background:  #080B14;
+  --surface:     rgba(255, 255, 255, 0.04);
+  --surface-2:   rgba(255, 255, 255, 0.07);
+  --primary:     #4F8EF7;
+  --secondary:   #8B5CF6;
+  --accent:      #06B6D4;
+  --text:        #F1F5F9;
+  --muted:       #94A3B8;
+  --border:      rgba(255, 255, 255, 0.09);
+  --border-glow: rgba(79, 142, 247, 0.3);
+  --nav-height:  72px;
+
+  /* Gradient palette */
+  --grad-primary:  linear-gradient(135deg, #4F8EF7 0%, #8B5CF6 100%);
+  --grad-cyan:     linear-gradient(135deg, #06B6D4 0%, #4F8EF7 100%);
+  --grad-warm:     linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
 }
 
 /* ─── Global Reset ───────────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
-  /* Prevent navbar from obscuring anchor targets */
   scroll-padding-top: var(--nav-height);
 }
 
@@ -34,50 +39,151 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Subtle grid texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(79, 142, 247, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 142, 247, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* ─── Custom Scrollbar ───────────────────────────────────────── */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--background); }
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.4);
+  background: rgba(79, 142, 247, 0.45);
   border-radius: 999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.7);
-}
+::-webkit-scrollbar-thumb:hover { background: rgba(79, 142, 247, 0.75); }
 
 /* ─── Glassmorphism ──────────────────────────────────────────── */
 .glass {
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
 }
 
-/* ─── Gradient Text (cross-browser) ─────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 0 32px rgba(79, 142, 247, 0.12), 0 8px 32px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px);
+}
+
+/* ─── Gradient Text ──────────────────────────────────────────── */
 .gradient-text {
-  background: linear-gradient(to right, #3B82F6, #7C3AED);
+  background: var(--grad-primary);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: transparent; /* Firefox fallback */
+  color: transparent;
+}
+
+.gradient-text-cyan {
+  background: var(--grad-cyan);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ─── Glow Buttons ───────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.875rem;
+  background: var(--grad-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.25s, transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 4px 24px rgba(79, 142, 247, 0.35);
+}
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(79, 142, 247, 0.5);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.875rem;
+  background: transparent;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+}
+
+/* ─── Tech Pill / Badge ──────────────────────────────────────── */
+.tech-pill {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(79, 142, 247, 0.12);
+  border: 1px solid rgba(79, 142, 247, 0.25);
+  color: #93C5FD;
+  transition: background 0.2s, border-color 0.2s;
+}
+.tech-pill:hover {
+  background: rgba(79, 142, 247, 0.22);
+  border-color: rgba(79, 142, 247, 0.5);
+}
+
+.badge-pill {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--grad-primary);
+  color: #fff;
 }
 
 /* ─── Section Layout ─────────────────────────────────────────── */
-
-/* Base: full-width responsive padding, no vertical centering */
 .section {
   min-height: 100vh;
   padding-left:  clamp(1.5rem, 8vw, 9rem);
   padding-right: clamp(1.5rem, 8vw, 9rem);
-  padding-top:    7rem;   /* clears fixed navbar + breathing room */
+  padding-top:    7rem;
   padding-bottom: 7rem;
+  position: relative;
+  z-index: 1;
 }
 
-/* Hero variant: flex-centered vertically */
 .section-hero {
   min-height: 100vh;
   padding-left:  clamp(1.5rem, 8vw, 9rem);
@@ -86,15 +192,16 @@ body {
   align-items: center;
   padding-top:    var(--nav-height);
   padding-bottom: 4rem;
+  position: relative;
+  z-index: 1;
 }
 
-/* Consistent section header block */
 .section-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.25em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: #3B82F6;
+  color: var(--primary);
   margin-bottom: 0.75rem;
 }
 
@@ -103,45 +210,103 @@ body {
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  color: #F8FAFC;
+  color: var(--text);
   margin-bottom: 1rem;
 }
 
 .section-subtitle {
-  color: #94A3B8;
+  color: var(--muted);
   font-size: 1.0625rem;
-  line-height: 1.7;
-  max-width: 520px;
+  line-height: 1.75;
+  max-width: 540px;
   margin-bottom: 3.5rem;
 }
 
-/* Subtle horizontal rule */
+/* Section separator */
 .divider {
   width: 100%;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent);
+  background: linear-gradient(to right, transparent, rgba(79, 142, 247, 0.2), transparent);
   margin: 0;
 }
 
-/* ─── Ambient Glow ───────────────────────────────────────────── */
+/* ─── Ambient Glow Orbs ──────────────────────────────────────── */
 .glow {
   position: absolute;
   border-radius: 50%;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #3B82F6 0%, transparent 70%);
-  filter: blur(80px);
-  opacity: 0.18;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  filter: blur(100px);
+  opacity: 0.12;
   pointer-events: none;
 }
 
 .glow-purple {
-  background: radial-gradient(circle, #7C3AED 0%, transparent 70%);
+  background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+  opacity: 0.10;
 }
 
-/* ─── Focus visible (Accessibility) ─────────────────────────── */
+.glow-cyan {
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.09;
+}
+
+/* ─── Timeline (Experience) ──────────────────────────────────── */
+.timeline-line {
+  position: absolute;
+  left: 1.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--primary), var(--secondary), transparent);
+  opacity: 0.4;
+}
+
+.timeline-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--grad-primary);
+  box-shadow: 0 0 12px rgba(79, 142, 247, 0.6);
+  flex-shrink: 0;
+}
+
+/* ─── Featured Project Strip ─────────────────────────────────── */
+.featured-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, rgba(79,142,247,0.25), rgba(139,92,246,0.25));
+  border: 1px solid rgba(79, 142, 247, 0.4);
+  color: #93C5FD;
+}
+
+/* ─── Skill Bars ─────────────────────────────────────────────── */
+.skill-bar-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.skill-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--grad-primary);
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Focus / Accessibility ──────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid #3B82F6;
+  outline: 2px solid var(--primary);
   outline-offset: 3px;
   border-radius: 4px;
 }
